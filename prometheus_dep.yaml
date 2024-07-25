@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miprometheusdep
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: miprometheus
+  template:
+    metadata:
+      labels:
+        app: miprometheus
+    spec:
+      containers:
+      - name: promcontainer
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: prometheus-storage
+          mountPath: /etc/prometheus/
+      volumes:
+      - name: prometheus-storage
+        persistentVolumeClaim:
+          claimName: mipvcprom
+     
